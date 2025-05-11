@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gold Buying Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+
+    .calculator {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 10px;
+      max-width: 420px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .calculator h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #ffc107;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="calculator">
+  <h2>Gold Buying Calculator</h2>
+
+  <label for="rate">Gold Rate (₹/gram):</label>
+  <input type="number" id="rate" step="0.01">
+
+  <label for="weight">Weight (grams):</label>
+  <input type="number" id="weight" step="0.01">
+
+  <label for="making">Making Charges:</label>
+  <input type="number" id="making" step="0.01">
+  <select id="makingType">
+    <option value="fixed">₹ (Fixed)</option>
+    <option value="percent">Percent (%)</option>
+  </select>
+
+  <label for="gst">GST (%):</label>
+  <input type="number" id="gst" step="0.01" value="3">
+
+  <label for="adjustment">Adjustment (Add/Subtract):</label>
+  <input type="number" id="adjustment" step="0.01">
+  <select id="adjustType">
+    <option value="add">Add (₹)</option>
+    <option value="subtract">Subtract (₹)</option>
+  </select>
+
+  <button onclick="calculate()">Calculate Total</button>
+
+  <div id="result">Total Amount: ₹ 0.00</div>
+</div>
+
+<script>
+  function calculate() {
+    let rate = parseFloat(document.getElementById("rate").value);
+    let weight = parseFloat(document.getElementById("weight").value);
+    let making = parseFloat(document.getElementById("making").value);
+    let makingType = document.getElementById("makingType").value;
+    let gst = parseFloat(document.getElementById("gst").value);
+    let adjustment = parseFloat(document.getElementById("adjustment").value);
+    let adjustType = document.getElementById("adjustType").value;
+
+    if (isNaN(rate) || isNaN(weight) || isNaN(making) || isNaN(gst)) {
+      alert("Please enter valid numbers in all required fields.");
+      return;
+    }
+
+    let goldPrice = rate * weight;
+    let makingCharge = (makingType === "percent") ? (goldPrice * making / 100) : making;
+    let subtotal = goldPrice + makingCharge;
+    let gstAmount = subtotal * gst / 100;
+    let total = subtotal + gstAmount;
+
+    if (!isNaN(adjustment)) {
+      if (adjustType === "add") {
+        total += adjustment;
+      } else if (adjustType === "subtract") {
+        total -= adjustment;
+      }
+    }
+
+    document.getElementById("result").innerText = `Total Amount: ₹ ${total.toFixed(2)}`;
+  }
+</script>
+
+</body>
+</html>
+
